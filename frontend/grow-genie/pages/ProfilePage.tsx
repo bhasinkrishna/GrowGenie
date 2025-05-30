@@ -68,7 +68,7 @@ export default function ProfilePage() {
             setter(url);
             return;
           }
-        } catch (_e) {
+        } catch (e) {
           // Ignore error
         }
       }
