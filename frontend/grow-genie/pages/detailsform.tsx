@@ -1,5 +1,6 @@
 import React, { useState, useRef, } from "react";
 import { useRouter } from "next/router";
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const DetailsForm = () => {
   const router = useRouter();
@@ -30,38 +31,41 @@ const DetailsForm = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      alert("You must be logged in to submit the form.");
-      return;
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    alert("You must be logged in to submit the form.");
+    return;
+  }
+
+  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  try {
+    const response = await fetch(`${baseURL}/api/form`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Form submission failed.");
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/form", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
+    const data = await response.json();
+    console.log("Success:", data);
+    router.push("/thank-you");
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Something went wrong while submitting the form.");
+  }
+};
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Form submission failed.");
-      }
-
-      const data = await response.json();
-      console.log("Success:", data);
-      router.push("/thank-you");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Something went wrong while submitting the form.");
-    }
-  };
 
   return (
     <div className="bg-green-50 min-h-screen">
