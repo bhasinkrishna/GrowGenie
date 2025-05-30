@@ -128,9 +128,23 @@ export default function ProfilePage() {
             <h1 className="text-xl sm:text-2xl font-bold text-green-700">Grow Genie</h1>
           </div>
           <div className="flex items-center gap-4 flex-wrap">
-            <a href="/" className="text-green-700 hover:underline">Home</a>
-            <a href="/about" className="text-green-700 hover:underline">About</a>
-            <a href="/help" className="text-green-700 hover:underline">Help</a>
+           {([["Soil Type", "soilType"], ["Climate", "climateCondition"], ["Watering", "wateringFrequency"]] as [string, keyof FormData][]).map(
+  ([label, key]) => (
+    <p key={key}>
+      <strong>{label}:</strong>{" "}
+      {isEditing ? (
+        <input
+          className="border p-1 rounded w-full mt-1"
+          value={editedData ? editedData[key] : ""}
+          onChange={(e) => handleChange(key, e.target.value)}
+        />
+      ) : (
+        formData ? formData[key] : ""
+      )}
+    </p>
+  )
+)}
+
 
             {isEditing ? (
               <button
@@ -246,43 +260,45 @@ export default function ProfilePage() {
           {/* Your Inputs */}
           <div className="bg-white rounded-2xl shadow p-4">
             <h2 className="font-semibold text-lg mb-2">Your Inputs</h2>
-            {[["Plants", "plantType"], ["Location", "location"], ["Space", "spaceLocation"], ["Size", "spaceSize"]].map(
-              ([label, key]) => (
-                <p key={key}>
-                  <strong>{label}:</strong>{" "}
-                  {isEditing ? (
-                    <input
-                      className="border p-1 rounded w-full mt-1"
-                      value={(editedData as any)?.[key] || ""}
-                      onChange={(e) => handleChange(key as keyof FormData, e.target.value)}
-                    />
-                  ) : (
-                    (formData as any)[key]
-                  )}
-                </p>
-              )
-            )}
+        {[["Plants", "plantType"], ["Location", "location"], ["Space", "spaceLocation"], ["Size", "spaceSize"]].map(
+  ([label, key]) => (
+    <p key={key}>
+      <strong>{label}:</strong>{" "}
+      {isEditing ? (
+        <input
+          className="border p-1 rounded w-full mt-1"
+          value={(editedData as any)?.[key] || ""}
+          onChange={(e) => handleChange(key as keyof FormData, e.target.value)}
+        />
+      ) : (
+        (formData as any)[key]
+      )}
+    </p>
+  )
+)}
+
           </div>
 
           {/* Soil & Climate */}
           <div className="bg-white rounded-2xl shadow p-4">
             <h2 className="font-semibold text-lg mb-2">Soil & Climate</h2>
-            {[["Soil Type", "soilType"], ["Climate", "climateCondition"], ["Watering", "wateringFrequency"]].map(
-              ([label, key]) => (
-                <p key={key}>
-                  <strong>{label}:</strong>{" "}
-                  {isEditing ? (
-                    <input
-                      className="border p-1 rounded w-full mt-1"
-                      value={(editedData as any)?.[key] || ""}
-                      onChange={(e) => handleChange(key as keyof FormData, e.target.value)}
-                    />
-                  ) : (
-                    (formData as any)[key]
-                  )}
-                </p>
-              )
-            )}
+          {([["Soil Type", "soilType"], ["Climate", "climateCondition"], ["Watering", "wateringFrequency"]] as [string, keyof FormData][]).map(
+  ([label, key]) => (
+    <p key={key}>
+      <strong>{label}:</strong>{" "}
+      {isEditing ? (
+        <input
+          className="border p-1 rounded w-full mt-1"
+          value={editedData ? editedData[key] : ""}
+          onChange={(e) => handleChange(key, e.target.value)}
+        />
+      ) : (
+        formData ? formData[key] : ""
+      )}
+    </p>
+  )
+)}
+
           </div>
 
           {/* Farming Tips */}
